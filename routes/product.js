@@ -2,23 +2,20 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/:id", (req, res) => {
-  // console.log(req.params.id);
-
+  let product = req.params.id;
   let sql = `SELECT * FROM products`;
 
+  console.log(sql);
+
   req.app.locals.con.query(sql, (error, result) => {
-    let list = [];
     for (let i = 0; i < result.length; i++) {
-      if (result[i].productLine == req.params.id) {
-        list.push(result[i].productName);
+      if (result[i].productName == product) {
+        res.send([result[i]]);
       }
     }
-
     if (error) {
       console.log("error", error);
     }
-    res.send(list);
   });
 });
-
 module.exports = router;
